@@ -1,14 +1,8 @@
 # Kafka Order Service
 
-A beginner-friendly Kafka + Spring Boot microservice project built to learn:
+A hands-on Event-Driven Microservice project built using Spring Boot, Apache Kafka, PostgreSQL, Docker, and Schema Registry to learn distributed system fundamentals and asynchronous communication patterns.
 
-- Apache Kafka fundamentals
-- Event-driven architecture
-- Kafka Producer & Consumer
-- Spring Boot integration with Kafka
-- PostgreSQL integration
-- Docker Compose setup
-- REST API communication
+This project demonstrates how REST APIs, Kafka Producers, Consumers, Schema Registry, and databases work together in a scalable microservice architecture.
 
 ---
 
@@ -20,12 +14,15 @@ A beginner-friendly Kafka + Spring Boot microservice project built to learn:
 | Spring Boot | 4.x |
 | Apache Kafka | 3.x |
 | PostgreSQL | 16 |
-| Docker | Latest |
+| Confluent Schema Registry | 7.x |
+| Docker & Docker Compose | Latest |
 | Maven | Latest |
+| Spring Data JPA | Latest |
+| Hibernate | Latest |
 
 ---
 
-# 📚 Project Architecture
+# 📚 Architecture Overview
 
 ```text
 Client
@@ -33,6 +30,8 @@ Client
 REST API
    ↓
 Kafka Producer
+   ↓
+Schema Registry
    ↓
 Kafka Topic
    ↓
@@ -74,9 +73,9 @@ src/main/java/com/example/kafka_order_service
 
 ---
 
-# ⚙️ Local Setup
+# ⚙️ Local Development Setup
 
-## 1. Clone Project
+## 1. Clone Repository
 
 ```bash
 git clone <your-repository-url>
@@ -88,17 +87,19 @@ cd kafka-order-service
 
 ---
 
-## 2. Start Docker Containers
+## 2. Start Infrastructure
 
 ```bash
 docker compose up -d
 ```
 
 This starts:
-- Kafka
-- PostgreSQL
 
-Check running containers:
+- Apache Kafka
+- PostgreSQL
+- Confluent Schema Registry
+
+Verify running containers:
 
 ```bash
 docker ps
@@ -106,21 +107,27 @@ docker ps
 
 ---
 
-# ▶️ Run Application
+# ▶️ Run Spring Boot Application
 
 ```bash
 mvn spring-boot:run
 ```
 
-Application runs on:
+Application URL:
 
 ```text
 http://localhost:8080
 ```
 
+Schema Registry URL:
+
+```text
+http://localhost:8081
+```
+
 ---
 
-# 🧪 Test API
+# 🧪 API Testing
 
 ## Create Order
 
@@ -154,13 +161,16 @@ curl -X POST http://localhost:8080/api/orders \
 
 ---
 
-# 🔥 Kafka Flow
+# 🔥 Event Processing Flow
 
-## Producer Flow
+## Producer Workflow
 
-1. REST API receives request
-2. `OrderService` creates Kafka event
-3. Event published to Kafka topic
+1. REST API receives order request
+2. `OrderService` creates event payload
+3. Kafka Producer publishes message to topic
+4. Schema Registry validates and registers schema
+
+Kafka Topic:
 
 ```text
 order-created-topic
@@ -168,67 +178,110 @@ order-created-topic
 
 ---
 
-## Consumer Flow
+## Consumer Workflow
 
 1. Kafka Consumer listens to topic
-2. Event consumed
-3. Order saved into PostgreSQL database
+2. Event is consumed asynchronously
+3. Data is transformed into entity object
+4. Order is persisted into PostgreSQL
 
 ---
 
-# 🧠 Kafka Concepts Learned
+# 🧠 Kafka Concepts Implemented
 
-## Producer
-Application that sends messages to Kafka.
+## Kafka Producer
+Publishes events/messages into Kafka topics.
 
-## Consumer
-Application that reads messages from Kafka.
+## Kafka Consumer
+Consumes events asynchronously from Kafka topics.
 
-## Topic
-Category/channel where messages are stored.
+## Kafka Topic
+Logical channel used to store and stream events.
 
-## Broker
-Kafka server instance.
-
-## Offset
-Unique position of message inside partition.
+## Kafka Broker
+Kafka server responsible for managing topics and partitions.
 
 ## Consumer Group
-Multiple consumers sharing workload.
+Allows multiple consumers to share processing workload.
+
+## Offset
+Unique identifier representing message position inside a partition.
 
 ## Event-Driven Architecture
-Services communicate using events/messages instead of direct calls.
+Microservices communicate through asynchronous events instead of direct service-to-service calls.
+
+## Schema Registry
+Centralized schema validation and schema evolution management for Kafka events.
+
+## JSON Schema Serialization
+Ensures message structures remain consistent between Producers and Consumers.
 
 ---
 
-# 🛠 Future Improvements
+# 🗄 Database Integration
+
+- PostgreSQL used for persistent storage
+- Spring Data JPA + Hibernate for ORM
+- Automatic schema/table generation using Hibernate
+
+Example Table:
+
+```text
+orders
+```
+
+---
+
+# 🐳 Docker Infrastructure
+
+Docker Compose is used to provision:
+
+- Kafka Broker
+- PostgreSQL Database
+- Schema Registry
+
+Benefits:
+- Easy local setup
+- Consistent development environment
+- Simplified distributed system testing
+
+---
+
+# 📈 Future Improvements
 
 - Retry mechanism
 - Dead Letter Queue (DLQ)
-- Kafka partitions
-- Multiple consumers
-- Schema Registry
+- Multiple Kafka partitions
+- Multiple consumer instances
 - Avro serialization
-- Dockerized Spring Boot app
+- Kafka Streams
+- Dockerized Spring Boot deployment
 - Kubernetes deployment
-- Monitoring with Grafana
+- Monitoring with Grafana & Prometheus
 - Distributed tracing
+- Idempotent consumer handling
+- Exactly-once processing
 
 ---
 
-# 📖 Learning Goals
+# 📖 Learning Outcomes
 
 This project helps understand:
 
-- Real-world Kafka workflow
+- Distributed systems fundamentals
+- Kafka event streaming
 - Asynchronous communication
-- Decoupled microservices
-- Event publishing & consumption
-- Kafka with Spring Boot
-- Database persistence after event processing
+- Event-driven microservices
+- Producer/Consumer architecture
+- Schema Registry integration
+- Spring Boot + Kafka integration
+- Database persistence workflows
+- Docker-based local infrastructure
 
 ---
 
 # 👨‍💻 Author
 
-Java | Spring Boot | Kafka | Microservices
+Salitha Ekanayaka
+
+Java | Spring Boot | Apache Kafka | Microservices | Distributed Systems
