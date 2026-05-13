@@ -3,7 +3,7 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/orderdb
+    url: jdbc:postgresql://localhost:5433/orderdb
     username: postgres
     password: password
 
@@ -22,15 +22,17 @@ spring:
   kafka:
     bootstrap-servers: localhost:9092
 
+    properties:
+      schema.registry.url: http://localhost:8081
+
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      value-serializer: io.confluent.kafka.serializers.json.KafkaJsonSchemaSerializer
 
     consumer:
       group-id: order-service-group
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
-
+      value-deserializer: io.confluent.kafka.serializers.json.KafkaJsonSchemaDeserializer
       properties:
-        spring.json.trusted.packages: "*"
+        json.value.type: com.example.kafka_order_service.event.OrderCreatedEvent

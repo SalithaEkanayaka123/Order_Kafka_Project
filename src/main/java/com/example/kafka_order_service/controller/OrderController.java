@@ -1,12 +1,10 @@
 package com.example.kafka_order_service.controller;
 
 import com.example.kafka_order_service.dto.OrderRequest;
+import com.example.kafka_order_service.entity.OrderEntity;
 import com.example.kafka_order_service.service.OrderService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -27,5 +25,10 @@ public class OrderController {
                 "message", "Order event published successfully",
                 "orderId", orderId
         );
+    }
+
+    @GetMapping
+    public List<OrderEntity> getAllOrders() {
+        return orderService.getAllOrders();
     }
 }
